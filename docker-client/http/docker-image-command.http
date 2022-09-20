@@ -1,0 +1,15 @@
+### GET Image List
+
+GET http://localhost:8080/api/v1/docker-images
+
+### GET All Image List
+
+GET http://localhost:8080/api/v1/docker-images/all
+
+### GET Docker Image Inspect
+
+GET http://localhost:8080/api/v1/docker-images/inspect?imageId=ubuntu&tag=jammy
+
+### Pull Docker Image
+
+POST http://localhost:8080/api/v1/docker-images?repository=ubuntu&tag=jammy

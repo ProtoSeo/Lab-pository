@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,18 @@ public class DockerContainerController {
 			.listContainersCmd()
 			.withShowAll(true)
 			.withShowSize(true)
-			.withStatusFilter(Collections.singleton("container_status"))
+			.withStatusFilter(Collections.singleton("running"))
+			.exec();
+		return ResponseEntity.ok(containerList);
+	}
+
+	@GetMapping("/name")
+	public ResponseEntity<List<Container>> getImageNameContainer() {
+		List<Container> containerList = dockerClient
+			.listContainersCmd()
+			.withShowAll(true)
+			.withShowSize(true)
+			.withNameFilter(Collections.singleton("ubuntu"))
 			.exec();
 		return ResponseEntity.ok(containerList);
 	}
@@ -71,5 +83,23 @@ public class DockerContainerController {
 
 		dockerClient.startContainerCmd(response.getId()).exec();
 		return ResponseEntity.ok(response);
+	}
+
+	@DeleteMapping("/remove-ubuntu")
+	public ResponseEntity<String> removeUbuntuContainer() {
+		List<Container> containerList = dockerClient
+			.listContainersCmd()
+			.withShowAll(true)
+			.withShowSize(true)
+			.withNameFilter(Collections.singleton("ubuntu"))
+			.exec();
+
+		String containerId = containerList.get(0).getId();
+
+		// docker stop과 kill 차이
+		// dockerClient.stopContainerCmd(containerId).exec();
+		dockerClient.killContainerCmd(containerId).exec();
+		dockerClient.removeContainerCmd(containerId).exec();
+		return ResponseEntity.ok(containerId);
 	}
 }

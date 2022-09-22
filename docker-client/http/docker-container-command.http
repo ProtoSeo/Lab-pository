@@ -6,6 +6,10 @@ GET http://localhost:8080/api/v1/docker-containers
 
 GET http://localhost:8080/api/v1/docker-containers/running
 
+### GET Ubuntu Container
+
+GET http://localhost:8080/api/v1/docker-containers/name
+
 ### Post Create Container
 
 POST http://localhost:8080/api/v1/docker-containers?image=ubuntu&tag=jammy
@@ -13,3 +17,7 @@ POST http://localhost:8080/api/v1/docker-containers?image=ubuntu&tag=jammy
 ### Post Create Container with Parameter
 
 POST http://localhost:8080/api/v1/docker-containers/with?image=ubuntu&tag=jammy
+
+### DELETE Kill Ubuntu Container
+
+DELETE http://localhost:8080/api/v1/docker-containers/remove-ubuntu

@@ -1,6 +1,8 @@
 package com.example.dockerclient.controller;
 
+import java.io.File;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.BuildImageResultCallback;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.model.Image;
@@ -53,4 +56,17 @@ public class DockerImageController {
 		return ResponseEntity.ok(isSuccess);
 	}
 
+	//TODO 구현예정
+	@PostMapping("build")
+	public ResponseEntity<String> buildDockerImage(@RequestParam String username, @RequestParam String password) {
+		String image = dockerClient.buildImageCmd()
+			.withDockerfile(new File("path/to/Dockerfile"))
+			.withTags(Set.of("v0.0.1"))
+			.withBuildArg("USERNAME", username)
+			.withBuildArg("PW", password)
+			.exec(new BuildImageResultCallback())
+			.awaitImageId();
+
+		return ResponseEntity.ok(image);
+	}
 }
